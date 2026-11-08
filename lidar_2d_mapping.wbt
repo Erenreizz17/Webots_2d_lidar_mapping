@@ -1,0 +1,361 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "D:/protos/MyProto.proto"
+
+WorldInfo {
+  info [
+    ""
+  ]
+  title "Lidar Map"
+  lineScale 0.15
+}
+Viewpoint {
+  fieldOfView 1
+  orientation -0.4081951202076267 -0.5459770395201701 0.7316322957302199 4.467563918938035
+  position 0.08087715691144412 0.967132907660706 1.4597874024208817
+  follow "MyProto"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  rotation 0 1 0 4.692820414042842e-06
+  floorSize 3 3
+  wallThickness 0.05
+  wallHeight 0.8
+}
+DEF LIDAR_ROBOT MyProto {
+  rotation 0 0 1 1.5699996938995748
+  children [
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 71
+        axis 0 1 0
+        anchor 0 0.115 0.05
+      }
+      device [
+        PositionSensor {
+          name "left wheel sensor"
+        }
+        RotationalMotor {
+          name "left wheel motor"
+          consumptionFactor 70
+          maxVelocity 100
+          minPosition -20.7
+          maxPosition 71.04867043483668
+        }
+      ]
+      endPoint Solid {
+        translation 0 0.115 0.05
+        rotation 1 7.850449076788095e-17 0 1.5707996938995747
+        children [
+          DEF WHEEL_CYLINDER Shape {
+            appearance PBRAppearance {
+              baseColor 0.302 0.302 0.302
+              roughness 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.03
+              radius 0.05
+            }
+          }
+        ]
+        name "left wheel"
+        boundingObject DEF WHEEL Pose {
+          rotation 0 1 0 0
+          children [
+            DEF WHEEL_CYLINDER Shape {
+              appearance PBRAppearance {
+                baseColor 0.302 0.302 0.302
+                roughness 1
+                metalness 0
+              }
+              geometry Cylinder {
+                height 0.03
+                radius 0.05
+              }
+            }
+          ]
+          rotationStep 0.31415
+        }
+        physics DEF PHYSICS_WHEEL Physics {
+          density -1
+          mass 0.05
+        }
+        rotationStep 0.31415
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 71
+        axis 0 1 0
+        anchor 0 -0.115 0.05
+      }
+      device [
+        PositionSensor {
+          name "right wheel sensor"
+        }
+        RotationalMotor {
+          name "right wheel motor"
+          consumptionFactor 70
+          maxVelocity 100
+          minPosition -20.7
+          maxPosition 71.04867132773703
+        }
+      ]
+      endPoint Solid {
+        translation 0 -0.115 0.05
+        rotation 1 7.850449076788095e-17 0 1.5707996938995747
+        children [
+          USE WHEEL_CYLINDER
+        ]
+        name "right wheel"
+        boundingObject DEF WHEEL Pose {
+          rotation 0 1 0 0
+          children [
+            DEF WHEEL_CYLINDER Shape {
+              appearance PBRAppearance {
+                baseColor 0.302 0.302 0.302
+                roughness 1
+                metalness 0
+              }
+              geometry Cylinder {
+                height 0.03
+                radius 0.05
+              }
+            }
+          ]
+          rotationStep 0.31415
+        }
+        physics USE PHYSICS_WHEEL
+        rotationStep 0.31415
+      }
+    }
+    Pose {
+      translation 0 0 0.124
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.749 0.749 0.749
+            roughness 1
+            metalness 0
+          }
+          geometry DEF BODY Cylinder {
+            height 0.24
+            radius 0.1
+          }
+        }
+      ]
+      rotationStep 0.31415
+    }
+    DEF US0 DistanceSensor {
+      translation 0.089 0.0460734 0.189
+      rotation 0 0 -1 -0.499
+      children [
+        DEF SONAR_SENSOR Pose {
+          rotation 0.5780167627291821 0.5770167337279206 -0.5770167337279206 -2.09
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.302 0.302 0.302
+                roughness 1
+                metalness 0
+              }
+              geometry Cylinder {
+                height 0.01
+                radius 0.024
+              }
+            }
+          ]
+          rotationStep 0.31415
+        }
+      ]
+      name "us0"
+      rotationStep 0.31415
+      lookupTable [
+        0 0 0
+        0.4 0.4 0
+      ]
+      type "sonar"
+      numberOfRays 15
+      aperture 1.578
+    }
+    DEF US1 DistanceSensor {
+      translation 0.075 -0.07 0.189
+      rotation 0 0 1 -0.501
+      children [
+        USE SONAR_SENSOR
+      ]
+      name "us1"
+      rotationStep 0.31415
+      lookupTable [
+        0 0 0
+        0.4 0.4 0
+      ]
+      type "sonar"
+      numberOfRays 15
+    }
+    DEF LIDAR Lidar {
+      translation 0 0 0.45
+      children [
+        Transform {
+          translation 0 0 -0.01
+          rotation 0 0 -1 0
+          scale 6 5 3
+          children [
+            DEF STRUCTURE_AXES Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor 0.02 0.02 0.02
+                }
+              }
+              geometry IndexedLineSet {
+                coord Coordinate {
+                  point [
+                    0 0 0.01
+                    0.01 0 -0.08
+                    -0.01 0 -0.08
+                    0 0.01 -0.08
+                    0 -0.01 -0.08
+                  ]
+                }
+                coordIndex [
+                  0, 1, 0, 2, 0, 3, 0, 4
+                ]
+              }
+            }
+          ]
+          rotationStep 0.31415
+        }
+      ]
+      rotationStep 0.31415
+      fieldOfView 1.57
+      numberOfLayers 1
+      near 0.05
+      minRange 0.05
+      maxRange 3
+      type "rotating"
+      defaultFrequency 2
+      rotatingHead Solid {
+        children [
+          DEF CAMERA_SHAPE Pose {
+            rotation 0 1 0 1.5707996938995747
+            children [
+              DEF CAMERA_OUTLINE Shape {
+                appearance PBRAppearance {
+                  baseColor 0.898 0.898 0.898
+                  roughness 1
+                  metalness 0
+                }
+                geometry Cylinder {
+                  height 0.06
+                  radius 0.024
+                }
+              }
+            ]
+          }
+          Pose {
+            translation 0.03 0 0
+            children [
+              DEF LENS Shape {
+                appearance PBRAppearance {
+                  baseColor 0 0 0
+                  roughness 1.11022e-16
+                  metalness 0
+                }
+                geometry Sphere {
+                  radius 0.015
+                  subdivision 2
+                }
+              }
+            ]
+          }
+        ]
+        name "rotatingHead"
+        recognitionColors [
+          0 0 0
+        ]
+        rotationStep 0.31415
+      }
+    }
+  ]
+  name "self"
+  boundingObject Pose {
+    translation 0 0 0.124
+    rotation 0 0 1 -1.57
+    children [
+      USE BODY
+    ]
+  }
+  physics Physics {
+    density -1
+    mass 1.5
+    centerOfMass [
+      0 0 0.15
+    ]
+  }
+  rotationStep 0.31415
+  controller "my_controller_lidar_3d_mapping"
+  cpuConsumption 20
+}
+Solid {
+  translation -0.9 -0.6 0.4
+  rotation 0 0 1 0.4
+  children [
+    DEF BOX_SHAPE Shape {
+      appearance PBRAppearance {
+        baseColor 1 1 0
+        roughness 0.0393
+        metalness 0
+      }
+      geometry DEF BOX1 Box {
+        size 1 0.14 1.2
+      }
+    }
+  ]
+  name "yellow box"
+  boundingObject USE BOX_SHAPE
+  rotationStep 0.31415
+}
+Solid {
+  translation 0.9 -0.1 0.47
+  rotation 0 0 1 1.6189996938995748
+  children [
+    DEF BOX_SHAPE1 Shape {
+      appearance PBRAppearance {
+        baseColor 0 0 1
+        roughness 0.519
+        metalness 0
+      }
+      geometry DEF BOX2 Box {
+        size 0.2 1.1 1
+      }
+    }
+  ]
+  name "blue box"
+  boundingObject USE BOX_SHAPE1
+  rotationStep 0.31415
+}
+DEF green_sphere Solid {
+  translation -0.6 0.7 0.17
+  children [
+    DEF SPHERE_SHAPE Shape {
+      appearance PBRAppearance {
+        baseColor 0 1 0
+        roughness 1.11e-16
+        metalness 0
+      }
+      geometry Sphere {
+        radius 0.4
+      }
+    }
+  ]
+  name "green sphere"
+  boundingObject USE SPHERE_SHAPE
+  rotationStep 0.31415
+}
